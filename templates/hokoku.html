@@ -1,0 +1,75 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>調査結果報告所</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        var submit_click = function() {
+            document.getElementById("check_kurukuru").classList.remove("hidden");
+            document.getElementById("check_input").classList.add("hidden")
+        }
+        $(function() {
+            // Ajax button click
+            $('#submit_button').on('click', function() {
+                var kuru = document.getElementById("check_kurukuru")
+                kuru.classList.remove("hidden");
+                var inputt = document.getElementById("check_input")
+                inputt.classList.add("hidden")
+                var resultt = document.getElementById("check_result")
+                resultt.classList.add("hidden")
+                var resulttitle = document.getElementById("result_title")
+                var resulttinner = document.getElementById("result_inner")
+                console.log($('#keyword').val())
+                $.ajax({
+                        url: '/keyword_check',
+                        type: 'POST',
+                        data: {
+                            'keyword': $('#keyword').val()
+                        }
+                    })
+                    // Ajaxリクエストが成功した時発動
+                    .done((data) => {
+                        data1 = JSON.parse(data)
+                        console.log(data1)
+
+                        resultt.classList.remove("hidden")
+                        resulttitle.innerHTML = data1.result.tf;
+                        resulttinner.innerHTML = data1.result.inner;
+
+                    })
+                    .fail((data) => {
+                        resultt.innerHTML = "<h1>送信に失敗しました。通信状況を確認してください。</h1><a href='/' class='box button'>戻る</a>"
+                    })
+                    // Ajaxリクエストが成功・失敗どちらでも発動
+                    .always((data) => {
+                        kuru.classList.add("hidden")
+                        inputt.classList.add("hidden")
+                        resultt.classList.remove("hidden")
+                    });
+            });
+        });
+    </script>
+</head>
+
+<body style="width: 50%;position: absolute;
+top: 50%;
+left: 50%;
+-webkit-transform: translateY(-50%) translateX(-50%);
+transform: translateY(-50%) translateX(-50%);">
+    <div id="check_input">
+        <h1>調査結果報告所<span style="padding: 1em;font-size: 50%;">by truemission</span></h1>
+        <input type="text" id="keyword" placeholder="キーワードを報告">
+        <button class="box button" id="submit_button">送信</button>
+        <p>最終キーワードの報告は残り{{ nokori }}回です。それ以降はエラーになります。</p>
+    </div>
+    <div id="check_kurukuru" class="hidden">
+        <h1><span style="padding: 1em;font-size: 50%;">確認中です...</span></h1>
+    </div>
+    <div id="check_result" class="hidden">
+        <h1 id="result_title"></h1>
+        <p id="result_inner"></p>
+    </div>
+</body>
+
+</html>
