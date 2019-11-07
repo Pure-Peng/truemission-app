@@ -13,6 +13,12 @@ dbname = "tm.db"
 port = int(os.environ.get('PORT', 5000))
 
 
+def add_session(f):
+    def wrapper(*args, **kwargs):
+
+        f(*args, **kwargs)
+
+
 @app.route("/pr")
 def pr():
     return render_template("pr.html")
@@ -77,7 +83,7 @@ def hokoku():
     userhokoku = tuple()
     with closing(sqlite3.connect(dbname)) as conn:
         c = conn.cursor()
-        c.execute("select from houkoku where (?)", (session["userhash"],))
+        c.execute("select from houkoku where (?)", (session["passwhash"],))
         userhokoku = c.fetchall()
     if len(userhokoku) >= 3:
         return render_template('almost.html')
