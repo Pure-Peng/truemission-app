@@ -12,6 +12,7 @@ dbname = "tm.db"
 # Bind to PORT if defined, otherwise default to 5000.
 port = int(os.environ.get('PORT', 5000))
 
+
 @app.route("write_db")
 def write_db():
     with closing(sqlite3.connect(dbname)) as conn:
@@ -63,6 +64,7 @@ def login_check():
                     "inner": ""
                 }
             }
+            return json.dumps(result)
         else:
             result = {
                 "result": {
@@ -70,6 +72,7 @@ def login_check():
                     "inner": "ログインに失敗しました。"
                 }
             }
+            return json.dumps(result)
 
 
 @app.route('/login')
@@ -88,7 +91,7 @@ def hokoku():
     if len(userhokoku) >= 3:
         return render_template('almost.html')
     else:
-        return render_template('houkoku.html', {"nokori": len(userhokoku)})
+        return render_template('houkoku.html', nokori=len(userhokoku))
 
 
 @areyoulogin('/asayake_ninsho')
