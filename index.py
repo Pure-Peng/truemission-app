@@ -12,11 +12,11 @@ dbname = "tm.db"
 # Bind to PORT if defined, otherwise default to 5000.
 port = int(os.environ.get('PORT', 5000))
 
-
-def add_session(f):
-    def wrapper(*args, **kwargs):
-
-        f(*args, **kwargs)
+@app.route("write_db")
+def write_db():
+    with closing(sqlite3.connect(dbname)) as conn:
+        c = conn.cursor()
+        c.execute("create table")
 
 
 @app.route("/pr")
@@ -101,7 +101,7 @@ def ninsho():
 @app.route('/firststage_check', methods=["POST"])
 def firststage_check():
     keyword = request.form['keyword']
-    KEYWORDS = {"1ststage_num": "738"}
+    KEYWORDS = os.environ.get('KEYWORD')
     if isinstance(keyword, str):
         if keyword == KEYWORDS["1ststage_num"]:
             result = {
