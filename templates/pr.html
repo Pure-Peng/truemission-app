@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='safari-pinned-tab.svg') }}" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>調査結果報告所</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+</head>
+
+<body style="width: 50%;position: absolute;
+top: 50%;
+left: 50%;
+-webkit-transform: translateY(-50%) translateX(-50%);
+transform: translateY(-50%) translateX(-50%);
+margin: 0px;">
+    <p>latest mission -
+        <img src="{{ url_for('static', filename='truemission_icon.png') }}" style="padding-left: 20%;"></p>
+    <h4 style="margin: 0px;">星片の宝石を探せ</h4>
+    <p>エージェント各位<span style="padding: 20%;">11/23 sat.</span></p>
+    <p>新たな依頼だ。</p>
+    <p>八王子にはユウグレ教祖の隠した、</p>
+    <p>「星片の宝石」（ほしへんのほうせき）が隠されているらしい。</p>
+    <p>12/22 sun. に八王子駅周辺を捜索してくれ。</p>
+    <div><a href='/' class='box button'>戻る</a></div>
+</body>
+
+</html>

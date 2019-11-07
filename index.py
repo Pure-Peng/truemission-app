@@ -3,7 +3,7 @@ import json
 import sqlite3
 import hashlib
 from contextlib import closing
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, abort
 
 app = Flask(__name__)
 
@@ -13,20 +13,57 @@ dbname = "tm.db"
 port = int(os.environ.get('PORT', 5000))
 
 
-def areyoulogin(func):
-    if "username" in session and "hash" in session:
-        if hashlib.sha3_256(str(session["username"]).encode()).hexdigest() == session["hash"]:
-            return func
-        else:
-            return redirect("/login")
-    else:
-        return redirect("/login")
+@app.route("/pr")
+def pr():
+    return render_template("pr.html")
 
 
-@app.route('/logincheck')
+@app.errorhandler(404)
+def notfound(error):
+    return render_template("notfound.html", for_="yugure_hokoku"), 404
+
+
+def areyoulogin(*dargs):
+    def decorator(f):
+        def wrapper(*args):
+            newargs = dargs + args
+            if "username" in session and "passwhash" in session:
+                if len(session["username"]) == 3:
+                    f()
+                else:
+                    redirect("/login?from_="+str(*newargs[0]))
+            else:
+                redirect("/login?from_="+str(*newargs[0]))
+
+        return wrapper
+    return decorator
+
+
+@app.route('/logincheck', methods=["POST"])
 def login_check():
-    hashlib.sha3_256(str(session["username"]).encode()
-                     ).hexdigest() == session["hash"]
+    with closing(sqlite3.connect(dbname)) as conn:
+        c = conn.cursor()
+        c.execute("select from users where id == (?)", (request.form['id']))
+        users = c.fetchall()
+        userid = list()
+        passwhash = list()
+        for i in users:
+            passwhash.append(i[1])
+            userid.append(i[0])
+        if hashlib.sha3_256(request.form['passw'].encode()).hexdigest() in passwhash:
+            result = {
+                "result": {
+                    "tf": "success",
+                    "inner": ""
+                }
+            }
+        else:
+            result = {
+                "result": {
+                    "tf": "fail",
+                    "inner": "ログインに失敗しました。"
+                }
+            }
 
 
 @app.route('/login')
@@ -34,17 +71,27 @@ def login():
     return render_template('login.html')
 
 
-@areyoulogin
+@areyoulogin('/yugure_hokoku')
 @app.route('/yugure_hokoku')
 def hokoku():
-    return render_template('houkoku.html')
+    userhokoku = tuple()
+    with closing(sqlite3.connect(dbname)) as conn:
+        c = conn.cursor()
+        c.execute("select from houkoku where (?)", (session["userhash"],))
+        userhokoku = c.fetchall()
+    if len(userhokoku) >= 3:
+        return render_template('almost.html')
+    else:
+        return render_template('houkoku.html', {"nokori": len(userhokoku)})
 
 
+@areyoulogin('/asayake_ninsho')
 @app.route('/asayake_ninsho')
 def ninsho():
     return render_template('ninsho.html')
 
 
+@areyoulogin('/firststage_check')
 @app.route('/firststage_check', methods=["POST"])
 def firststage_check():
     keyword = request.form['keyword']
@@ -54,7 +101,7 @@ def firststage_check():
             result = {
                 "result": {
                     "tf": "success",
-                    "inner": "おめでとうございます！認証に成功しました。私は京王八王子のマックに居ます。ユウグレ教祖の謎の紙をそこで渡したいと思います。移動を宜しくお願いします。<a href='/' class='box button'>戻る</a>"
+                    "inner": "認証に成功しました。私は京王八王子のマックに居ます。ユウグレ教祖の謎の紙をそこで渡したいと思います。移動を宜しくお願いします。<a href='/' class='box button'>戻る</a>"
                 }
             }
             return json.dumps(result)
@@ -68,6 +115,7 @@ def firststage_check():
             return json.dumps(result)
 
 
+@areyoulogin('/keyword_check')
 @app.route('/keyword_check', methods=["POST"])
 def check():
     keyword = request.form['keyword']
