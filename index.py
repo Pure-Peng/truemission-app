@@ -1,23 +1,17 @@
 import os
 import json
-import sqlite3
+from google.cloud import datastore
+import datetime
 import hashlib
-from contextlib import closing
 from flask import Flask, render_template, request, session, redirect, abort
 
 app = Flask(__name__)
+app.secret_key = "avhyfwbcbf89qu8f3uqc8y8vb"
+client = datastore.Client()
 
-dbname = "tm.db"
 
-# Bind to PORT if defined, otherwise default to 5000.
 port = int(os.environ.get('PORT', 5000))
-
-
-@app.route("write_db")
-def write_db():
-    with closing(sqlite3.connect(dbname)) as conn:
-        c = conn.cursor()
-        c.execute("create table")
+jst = datetime.timezone(datetime.timedelta(hours=9), 'JST')
 
 
 @app.route("/pr")
@@ -27,92 +21,135 @@ def pr():
 
 @app.errorhandler(404)
 def notfound(error):
-    return render_template("notfound.html", for_="yugure_hokoku"), 404
+    return render_template("notfound.html", for_="/asayake_ninsho"), 404
 
 
-def areyoulogin(*dargs):
-    def decorator(f):
-        def wrapper(*args):
-            newargs = dargs + args
-            if "username" in session and "passwhash" in session:
-                if len(session["username"]) == 3:
-                    f()
-                else:
-                    redirect("/login?from_="+str(*newargs[0]))
-            else:
-                redirect("/login?from_="+str(*newargs[0]))
-
-        return wrapper
-    return decorator
+@app.route('/signup')
+def signup_view():
+    return render_template("signup.html")
 
 
-@app.route('/logincheck', methods=["POST"])
+@app.route('/signup_submit', methods=["POST"])
+def signup_submit():
+    if len(request.form["passw"]) != 5:
+        result = {
+            "result": {
+                "tf": "fail",
+                "inner": "ログインに失敗しました。"
+            }
+        }
+        return json.dumps(result)
+    elif len(str(request.form["num"])) != 1:
+        result = {
+            "result": {
+                "tf": "fail",
+                "inner": "ログインに失敗しました。"
+            }
+        }
+        return json.dumps(result)
+    elif not 3 <= len(str(request.form["name"])) <= 10:
+        result = {
+            "result": {
+                "tf": "fail",
+                "inner": "ログインに失敗しました。"
+            }
+        }
+        return json.dumps(result)
+    else:
+        ent = datastore.Entity(client.key("team", str(request.form["name"])))
+        ent["num"] = int(request.form["num"])
+        ent["passwhash"] = hashlib.sha3_256(
+            request.form['passw'].encode()).hexdigest()
+        ent["time"] = datetime.datetime.now(jst)
+        client.put(ent)
+        return redirect("/login")
+
+
+@app.route('/login_check', methods=["POST"])
 def login_check():
-    with closing(sqlite3.connect(dbname)) as conn:
-        c = conn.cursor()
-        c.execute("select from users where id == (?)", (request.form['id']))
-        users = c.fetchall()
-        userid = list()
-        passwhash = list()
-        for i in users:
-            passwhash.append(i[1])
-            userid.append(i[0])
-        if hashlib.sha3_256(request.form['passw'].encode()).hexdigest() in passwhash:
-            result = {
-                "result": {
-                    "tf": "success",
-                    "inner": ""
-                }
+    if len(request.form["passw"]) != 5:
+        del session["teamname"]
+        result = {
+            "result": {
+                "tf": "fail",
+                "inner": "ログインに失敗しました。"
             }
-            return json.dumps(result)
-        else:
-            result = {
-                "result": {
-                    "tf": "fail",
-                    "inner": "ログインに失敗しました。"
-                }
+        }
+        return json.dumps(result)
+    ent = client.get(client.key("team", request.form['id']))
+    if hashlib.sha3_256(request.form['passw'].encode()).hexdigest() == ent["passwhash"]:
+        session["teamname"] = ent.key.id_or_name
+        result = {
+            "result": {
+                "tf": "success",
+                "inner": ""
             }
-            return json.dumps(result)
+        }
+        return json.dumps(result)
+    else:
+        del session["teamname"]
+        result = {
+            "result": {
+                "tf": "fail",
+                "inner": "ログインに失敗しました。"
+            }
+        }
+        return json.dumps(result)
 
 
 @app.route('/login')
 def login():
+    print("hello")
     return render_template('login.html')
 
 
-@areyoulogin('/yugure_hokoku')
 @app.route('/yugure_hokoku')
 def hokoku():
+    if ("teamname" in session) and ("passwhash" in session):
+        print("this is logging in")
+    else:
+        return redirect("/login?from_='/yugure_hokoku'")
     userhokoku = tuple()
-    with closing(sqlite3.connect(dbname)) as conn:
-        c = conn.cursor()
-        c.execute("select from houkoku where (?)", (session["passwhash"],))
-        userhokoku = c.fetchall()
-    if len(userhokoku) >= 3:
+    query = client.query(kind="secondreport")
+    houkoku = list(query.fetch())
+    if len(houkoku) > 3:
         return render_template('almost.html')
     else:
-        return render_template('houkoku.html', nokori=len(userhokoku))
+        return render_template('hokoku.html', nokori=3-len(userhokoku))
 
 
-@areyoulogin('/asayake_ninsho')
 @app.route('/asayake_ninsho')
 def ninsho():
+    if ("teamname" in session):
+        print("this is logging in")
+    else:
+        return redirect("/login?from_='/asayake_ninsho'")
     return render_template('ninsho.html')
 
 
-@areyoulogin('/firststage_check')
 @app.route('/firststage_check', methods=["POST"])
 def firststage_check():
+    if ("teamname" in session) and ("passwhash" in session):
+        print("this is logging in")
+    else:
+        return redirect("/login?from_='/firststage_check'")
     keyword = request.form['keyword']
-    KEYWORDS = os.environ.get('KEYWORD')
     if isinstance(keyword, str):
-        if keyword == KEYWORDS["1ststage_num"]:
+        if keyword == 738:
             result = {
                 "result": {
                     "tf": "success",
                     "inner": "認証に成功しました。私は京王八王子のマックに居ます。ユウグレ教祖の謎の紙をそこで渡したいと思います。移動を宜しくお願いします。<a href='/' class='box button'>戻る</a>"
                 }
             }
+            try:
+                ent = datastore.Entity(client.key(
+                    "firstclear", session["teamname"]))
+                ent["success"] = True
+                ent["time"] = datetime.datetime.now(jst)
+                client.put(ent)
+            except:
+                print("an error ocujijaed on the firstclear")
             return json.dumps(result)
         else:
             result = {
@@ -124,12 +161,13 @@ def firststage_check():
             return json.dumps(result)
 
 
-@areyoulogin('/keyword_check')
 @app.route('/keyword_check', methods=["POST"])
 def check():
+    if ("teamname" in session) and ("passwhash" in session):
+        print("this is logging in")
+    else:
+        return redirect("/login?from_='/keyword_check'")
     keyword = request.form['keyword']
-
-    # json.loads(os.environ.get('KEYWORDS'))
 
     result = {
         "result": {
@@ -137,13 +175,13 @@ def check():
             "inner": "最終報告を済ませました。解答発表までお待ちください。<a href='/' class='box button'>戻る</a>"
         }
     }
-    with closing(sqlite3.connect(dbname)) as conn:
-        c = conn.cursor()
-        c.execute("insert into users (id, keyword) values (?,?)",
-                  (session["username"], keyword))
+    ent = datastore.Entity(client.key("secondreport", session["teamname"]))
+    ent["keyword"] = keyword
+    ent["time"] = datetime.datetime.now(jst)
+    client.put(ent)
 
     return json.dumps(result)
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=port)
+    app.run(port=port)

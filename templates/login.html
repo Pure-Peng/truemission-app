@@ -9,7 +9,7 @@
     <link rel="mask-icon" href="{{ url_for('static', filename='safari-pinned-tab.svg') }}" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
-    <title>調査結果報告所</title>
+    <title>ログイン</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         var submit_click = function() {
@@ -79,9 +79,9 @@ left: 50%;
 -webkit-transform: translateY(-50%) translateX(-50%);
 transform: translateY(-50%) translateX(-50%);">
     <div id="check_input">
-        <h1>調査結果報告所<span style="padding: 1em;font-size: 50%;">by truemission</span></h1>
-        <input type="text" id="id_" placeholder="グループID" minlength="5" maxlength="5">
-        <input type="text" id="passw_" placeholder="パスワード" minlength="5" maxlength="5">
+        <h3>ログイン<span style="padding: 1em;font-size: 50%;">by truemission</span></h3>
+        <input type="text" id="id_" placeholder="チーム名" minlength="3" maxlength="10">
+        <input class="input" type="password" id="passw_" placeholder="パスワード" minlength="5" maxlength="5">
         <button class="box button" id="submit_button">送信</button>
 
     </div>

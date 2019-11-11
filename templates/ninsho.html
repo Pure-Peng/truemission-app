@@ -66,10 +66,12 @@ left: 50%;
 -webkit-transform: translateY(-50%) translateX(-50%);
 transform: translateY(-50%) translateX(-50%);">
     <div id="check_input">
-        <h1>調査結果報告所<span style="padding: 1em;font-size: 50%;">by truemission</span></h1>
-        <input type="text" id="keyword" placeholder="キーワードを報告">
-        <button class="box button" id="submit_button">送信</button>
-        <p>最終キーワードの報告は一回までです。それ以降はエラーになります。</p>
+        <h1>アサヤケ教認証ページ<span style="padding: 1em;font-size: 50%;">by truemission</span></h1>
+        <form onsubmit="return false;">
+            <input class="input" type="num" id="keyword" placeholder="暗証番号" maxlength="3" minlength="3">
+            <button class="box button" id="submit_button">送信</button>
+        </form>
+        <p>3桁の暗証番号を入力してください。</p>
     </div>
     <div id="check_kurukuru" class="hidden">
         <h1><span style="padding: 1em;font-size: 50%;">確認中です...</span></h1>

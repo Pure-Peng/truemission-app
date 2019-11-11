@@ -9,6 +9,26 @@ body {
     user-select: none;
 }
 
+input {
+    padding: 0.3em;
+    background: none;
+    height: 2.3em;
+    width: 100%;
+    margin-bottom: 5%;
+    font-size: 110%;
+    border: solid 1px #3b3b3b;
+}
+
+.input {
+    padding: 0.3em;
+    background: none;
+    height: 2.3em;
+    width: 100%;
+    margin-bottom: 5%;
+    font-size: 110%;
+    border: solid 1px #3b3b3b;
+}
+
 .disable,
 .disable * {
     animation-name: none!important;
@@ -227,16 +247,6 @@ s {
     text-decoration: none!important;
     font-weight: 800;
     color: #ff57cd;
-}
-
-input[type="text"] {
-    padding: 0.3em;
-    background: none;
-    height: 2.3em;
-    width: 100%;
-    margin-bottom: 5%;
-    font-size: 110%;
-    border: solid 1px #3b3b3b;
 }
 
 .button {

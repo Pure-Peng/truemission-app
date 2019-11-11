@@ -9,13 +9,22 @@
     <link rel="mask-icon" href="{{ url_for('static', filename='safari-pinned-tab.svg') }}" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>調査結果報告所</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         var submit_click = function() {
             document.getElementById("check_kurukuru").classList.remove("hidden");
             document.getElementById("check_input").classList.add("hidden")
+        }
+
+        function getParam(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
         $(function() {
             // Ajax button click
@@ -30,24 +39,29 @@
                 var resulttinner = document.getElementById("result_inner")
                 console.log($('#keyword').val())
                 $.ajax({
-                        url: '/keyword_check',
+                        url: '/signup_submit',
                         type: 'POST',
                         data: {
-                            'keyword': $('#keyword').val()
+                            'name': $('#id_').val(),
+                            'passw': $("#passw_").val(),
+                            'num': $("#num_").val()
                         }
                     })
                     // Ajaxリクエストが成功した時発動
                     .done((data) => {
                         data1 = JSON.parse(data)
                         console.log(data1)
-
-                        resultt.classList.remove("hidden")
-                        resulttitle.innerHTML = data1.result.tf;
-                        resulttinner.innerHTML = data1.result.inner;
+                        if (data1.result.tf == "success") {
+                            window.location = "/asayake_ninsho"
+                        } else {
+                            resultt.classList.remove("hidden")
+                            resulttitle.innerHTML = data1.result.tf;
+                            resulttinner.innerHTML = data1.result.inner;
+                        }
 
                     })
                     .fail((data) => {
-                        resultt.innerHTML = "<h1>送信に失敗しました。通信状況を確認してください。</h1><a href='/' class='box button'>戻る</a>"
+                        resultt.innerHTML = "<h1>送信に失敗しました。通信状況を確認してください。</h1><a href='/signup' class='box button'>戻る</a>"
                     })
                     // Ajaxリクエストが成功・失敗どちらでも発動
                     .always((data) => {
@@ -66,10 +80,11 @@ left: 50%;
 -webkit-transform: translateY(-50%) translateX(-50%);
 transform: translateY(-50%) translateX(-50%);">
     <div id="check_input">
-        <h1>調査結果報告所<span style="padding: 1em;font-size: 50%;">by truemission</span></h1>
-        <input class="input" type="text" id="keyword" placeholder="キーワードを報告">
+        <h1>Hunters' チーム登録<span style="padding: 1em;font-size: 50%;">by truemission</span></h1>
+        <input type="text" id="id_" placeholder="チーム名(3~10文字)" minlength="3" maxlength="10">
+        <input class="input" type="password" id="passw_" placeholder="パスワード(半角英数5文字)" minlength="5" maxlength="5">
+        <input class="input" type="number" id="num_" placeholder="チームの人数(MAX4人)" maxlength="1">
         <button class="box button" id="submit_button">送信</button>
-        <p>最終キーワードの報告は残り{{ nokori }}回です。それ以降はエラーになります。</p>
     </div>
     <div id="check_kurukuru" class="hidden">
         <h1><span style="padding: 1em;font-size: 50%;">確認中です...</span></h1>
