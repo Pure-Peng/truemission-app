@@ -51,7 +51,7 @@
                         data1 = JSON.parse(data)
                         console.log(data1)
                         if (data1.result.tf == "success") {
-                            window.location = "'" + getParam("from_") + "'"
+                            window.location = getParam("from_")
                         } else {
                             resultt.classList.remove("hidden")
                             resulttitle.innerHTML = data1.result.tf;
@@ -82,8 +82,8 @@ transform: translateY(-50%) translateX(-50%);">
         <h3>ログイン<span style="padding: 1em;font-size: 50%;">by truemission</span></h3>
         <input type="text" id="id_" placeholder="チーム名" minlength="3" maxlength="10">
         <input class="input" type="password" id="passw_" placeholder="パスワード" minlength="5" maxlength="5">
-        <button class="box button" id="submit_button">送信</button>
-
+        <button class="box button" id="submit_button">ログイン</button>
+        <a class="box button" href="/signup">未登録の方は登録</a>
     </div>
     <div id="check_kurukuru" class="hidden">
         <h1><span style="padding: 1em;font-size: 50%;">確認中です...</span></h1>

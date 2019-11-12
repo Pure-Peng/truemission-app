@@ -10,26 +10,18 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>調査結果報告所</title>
+    <title>マイページ</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
 </head>
 
-<body style="width: 50%;position: absolute;
-top: 50%;
-left: 50%;
--webkit-transform: translateY(-50%) translateX(-50%);
-transform: translateY(-50%) translateX(-50%);
-margin: 0px;">
-    <p>latest mission -
-        <!--<img src="{{ url_for('static', filename='truemission_icon.png') }}" style="padding-left: 20%;">--></p>
-    <h4 style="margin: 0px;">星片の宝石を探せ</h4>
-    <p>エージェント各位<span style="padding: 20%;">11/23 sat.</span></p>
-    <p>新たな依頼だ。</p>
-    <p>八王子にはユウグレ教祖の隠した、</p>
-    <p>「星片の宝石」（ほしへんのほうせき）が隠されているらしい。</p>
-    <p>12/22 sun. に八王子駅周辺を捜索してくれ。</p>
-    <div><a href='/' class='box button'>戻る</a></div>
-</body>
+<body>
+    <h3>Truemission マイページ<span style="padding: 10%;">チーム名：{{ teamname }}</span></h3>
+    <p>
+        <span><a href="/asayake_ninsho">アサヤケ教徒Aの暗証番号の謎</a>クリア：{{ firstclear }}</span><br>
+        <span><a href="/yugure_hokoku">最終調査報告</a>履歴：<br>
+            {% for i in secondreports %}
+            <span style="padding: 3%;">{{ i["keyword"] }}</span> {% endfor %}</span><br>
+        <span>残り回数：{{ secondreport_num }}</span>
+    </p>
 
-</html>
+</body>

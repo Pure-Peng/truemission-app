@@ -3,10 +3,14 @@ body {
     background: #fdfbf3;
     color: #3b3b3b;
     font-size: 200%;
-    font-family: "Noto Sans JP";
+    font-family: "Noto Sans JP", "sans-serif";
     overflow-x: hidden;
     margin: 0px;
     user-select: none;
+}
+
+a {
+    text-decoration: none;
 }
 
 input {
