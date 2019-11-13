@@ -9,6 +9,32 @@ body {
     user-select: none;
 }
 
+table {
+    width: 100%;
+}
+
+table th {
+    position: relative;
+    text-align: left;
+    width: 40%;
+}
+
+table th:after {
+    display: block;
+    content: "";
+    width: 30px;
+    height: 2px;
+    background-color: #333;
+    position: absolute;
+    top: calc(50% - 1px);
+    right: 20px;
+}
+
+table td {
+    text-align: left;
+    width: 85%;
+}
+
 a {
     text-decoration: none;
 }

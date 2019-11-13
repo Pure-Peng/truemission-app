@@ -14,14 +14,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 
-<body>
+<body style="padding: 3%">
     <h3>Truemission マイページ<span style="padding: 10%;">チーム名：{{ teamname }}</span></h3>
-    <p>
-        <span><a href="/asayake_ninsho">アサヤケ教徒Aの暗証番号の謎</a>クリア：{{ firstclear }}</span><br>
-        <span><a href="/yugure_hokoku">最終調査報告</a>履歴：<br>
+    <table style="padding: 7%">
+        <tr>
+            <th><a href="/asayake_ninsho">アサヤケ教徒Aの暗証番号の謎</a>クリア</th>
+            <td>{{ firstclear }}</td>
+        </tr>
+        <tr>
+            <th><a href="/yugure_hokoku">最終調査報告</a>履歴</th>
             {% for i in secondreports %}
-            <span style="padding: 3%;">{{ i["keyword"] }}</span> {% endfor %}</span><br>
-        <span>残り回数：{{ secondreport_num }}</span>
-    </p>
+            <td style="padding-top: 3%;padding-bottom: 3%;">{{ i["keyword"] }}</td>
+        </tr>
+        <tr>
+            <th>
+                {% endfor %}残り回数</th>
+            <td>{{ secondreport_num }}</td>
+        </tr>
+    </table>
 
 </body>

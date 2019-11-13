@@ -14,10 +14,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 
-<body>
-    <h3>成功チーム<span style="padding: 10%;">チーム名：{{ teamname }}</span></h3>
-    <p>
-        {% for i in secondreport %} {{ i["name"] }}<br> {% endfor %}
-    </p>
+<body style="padding: 3%">
+    <h3>正解を解答したチーム<span style="padding: 10%;"></span></h3>
+
+    {% for i in secondreport %}
+    <p style="float: left;">{{ i["name"] }}</p>
+    {% endfor %}
+
 
 </body>

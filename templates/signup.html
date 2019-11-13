@@ -37,7 +37,6 @@
                 resultt.classList.add("hidden")
                 var resulttitle = document.getElementById("result_title")
                 var resulttinner = document.getElementById("result_inner")
-                console.log($('#keyword').val())
                 $.ajax({
                         url: '/signup_submit',
                         type: 'POST',
@@ -52,7 +51,7 @@
                         data1 = JSON.parse(data)
                         console.log(data1)
                         if (data1.result.tf == "success") {
-                            window.location = "/asayake_ninsho"
+                            window.location = "/"
                         } else {
                             resultt.classList.remove("hidden")
                             resulttitle.innerHTML = data1.result.tf;
@@ -80,11 +79,11 @@ left: 50%;
 -webkit-transform: translateY(-50%) translateX(-50%);
 transform: translateY(-50%) translateX(-50%);">
     <div id="check_input">
-        <h1>Hunters' チーム登録<span style="padding: 1em;font-size: 50%;">by truemission</span></h1>
-        <input type="text" id="id_" placeholder="チーム名(3~10文字)" minlength="3" maxlength="10">
-        <input class="input" type="password" id="passw_" placeholder="パスワード(半角英数5文字)" minlength="5" maxlength="5">
-        <input class="input" type="number" id="num_" placeholder="チームの人数(MAX4人)" maxlength="1">
-        <button class="box button" id="submit_button">送信</button>
+        <h3>truemission チーム登録</h1>
+            <input type="text" id="id_" placeholder="チーム名(3~10文字)" minlength="3" maxlength="10">
+            <input class="input" type="password" id="passw_" placeholder="パスワード(半角英数5文字)" minlength="5" maxlength="5">
+            <input class="input" type="number" id="num_" placeholder="チームの人数(MAX4人)" maxlength="1">
+            <button class="box button" id="submit_button">送信</button>
     </div>
     <div id="check_kurukuru" class="hidden">
         <h1><span style="padding: 1em;font-size: 50%;">確認中です...</span></h1>

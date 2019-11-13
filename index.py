@@ -39,11 +39,12 @@ def signup_submit():
                 "inner": "既に登録しています。<a href='/login' class='box button'>ログイン</a>"
             }
         }
+        return json.dumps(result)
     elif len(request.form["passw"]) != 5:
         result = {
             "result": {
                 "tf": "fail",
-                "inner": "登録に失敗しました。パスワードは英数8文字で入力してください。"
+                "inner": "登録に失敗しました。パスワードは英数8文字で入力してください。<a href='/signup' class='box button'>戻る</a>"
             }
         }
         return json.dumps(result)
@@ -51,7 +52,7 @@ def signup_submit():
         result = {
             "result": {
                 "tf": "fail",
-                "inner": "登録に失敗しました。可能な参加人数は1~4人です。"
+                "inner": "登録に失敗しました。可能な参加人数は1~4人です。<a href='/signup' class='box button'>戻る</a>"
             }
         }
         return json.dumps(result)
@@ -59,7 +60,15 @@ def signup_submit():
         result = {
             "result": {
                 "tf": "fail",
-                "inner": "登録に失敗しました。チーム名は3~10文字で入力してください。"
+                "inner": "登録に失敗しました。チーム名は3~10文字で入力してください。<a href='/signup' class='box button'>戻る</a>"
+            }
+        }
+        return json.dumps(result)
+    elif client.get(client.key("team", request.form['name'])) is not None:
+        result = {
+            "result": {
+                "tf": "fail",
+                "inner": "登録に失敗しました。チーム名の重複があります。違うチーム名にしてください。<a href='/signup' class='box button'>戻る</a>"
             }
         }
         return json.dumps(result)
@@ -70,13 +79,19 @@ def signup_submit():
             request.form['passw'].encode()).hexdigest()
         ent["time"] = datetime.datetime.now(jst)
         client.put(ent)
-        return redirect("/login")
+        result = {
+            "result": {
+                "tf": "success",
+                "inner": "成功しました。"
+            }
+        }
+        return json.dumps(result)
 
 
 @app.route('/')
 def mypage():
     if not "teamname" in session:
-        redirect("/login")
+        return redirect("/login")
     else:
         print("this is logging in on {}".format(session["teamname"]))
         firstclear = str()
@@ -149,7 +164,7 @@ def login():
 @app.route('/kaito')
 def success_team():
     query = client.query(kind="secondreport")
-    query.add_filter("name", "=", session["teamname"])
+    query.add_filter("keyword", "=", "夕闇の金剛石")
     houkoku = list(query.fetch())
     return render_template('kaito.html', secondreport=houkoku)
 
@@ -199,14 +214,14 @@ def firststage_check():
                     "inner": "認証に成功しました。私は京王八王子のマックに居ます。ユウグレ教祖の謎の紙をそこで渡したいと思います。移動を宜しくお願いします。<a href='/' class='box button'>戻る</a>"
                 }
             }
-            try:
+            if client.get(client.key("firstclear", session['teamname'])) is None:
                 ent = datastore.Entity(client.key(
                     "firstclear", session["teamname"]))
                 ent["success"] = True
                 ent["time"] = datetime.datetime.now(jst)
                 client.put(ent)
-            except:
-                print("an error occured on the firstclear")
+            else:
+                pass
             return json.dumps(result)
         else:
             result = {

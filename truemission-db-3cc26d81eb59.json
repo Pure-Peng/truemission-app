@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "truemission-db",
+  "private_key_id": "3cc26d81eb5991f2010d9ad665381554b8160b8c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDRypx/0wgU8Gxr\nAxX894WQtY3o7G/lZc92grFP3GSA2dCIbljNjyvZx1Tg+4qbRDvwF/RNCoaLJZD3\ngWd7leiNNwLxQN1a8UmoJLeFCsn3c9yHo6HEGHUk6ddAKQ4dSHWq6rGi76UY57Uo\ntkIEKeHm4GBma36cGJAucYA7LaqfZqPJP9hLKmyMpNAkXENf+Za89hsDCH2i89PC\nA5yZjH7rOOZAcwghUPTHSBjnWjLOIHH/vY4OwIexuM8zqKLjEnmIDf8tsierGfGb\nzJQDw7T8s5jk6rt4X4ACcmbf/MNNodA/MOfmc3uv0wpnG+ZNwHwMod35HWLve9q2\nJGOm3mslAgMBAAECggEATKxQJidqfLyh4zptfta36ftwsgA3pQ9gk1+Qji9uS+lP\nXY12xyncTOudCdzk+3okrcsTblS6d4BzSwHwYCqZo4LHgITEYchtsxY4PFeFGPsv\nTiNvq8uEhMkx8jEPB4TD/INqCLKtFD0a6JYz6nGkLk0y7ju7OjGAAHla9EXsZfTj\nsWS5pjFLUnYxOrYlOA+oJG0CxdZbi5J9KWvDzqGnB6DhnUhI+6bMI7DaQwTpt+WW\nroEFMQnTDlCnZqGkTTEnZo29zVY57Pzb0HazVzJavxewaO+oZCL3dawnm3iib5F1\nWQraUqCpr/Fns49mab2fEuyTPplNFiK5Ykj2ipxWwQKBgQDy8tx9I9JnF06ASOmJ\nGG5z1SI67X6TSGPrAr36oVSGkRBiEHcaoWs6WpwjkS/oyupmZ4TEal9YJt3dLt62\no/IJM1RvrEHX7NiI4KdHmj0QxIcKhpneyLGgDGcfB+MlTNyW8Z8WJUM4d3e13Jdm\ngTEethmj7sRYWPf+CxKxg1YZGwKBgQDdD8HOS/5lhmv9l6ZffjbTr1b2SOottebb\n9xiv4ZZOcP0nAeB/10kAQUSFHQ6e3fBJ+BNMGYf1/xn8ixrdNdV85zltstEyH9Q2\nJB4/GJP1mqYmC+OSxRravQ8+L6dn4Gh8Dh+Msa4qE0ziQRQ1/yKuDFxh7+DeTX8U\nMUkt6TAQvwKBgEhNXrEfaA6mMQacrGPQkY6Hb5h59aF/eb0HI+LjAHTL10RYAho6\nz96d+LndC5UMTpYLWMfboGRrrLuWp1FTmUSDsi1J5o6MPiT+NspobKQA2O+Y/1H+\nCF7JUic6Aa+oID4LynyculSjuUy2SZiH+kZZi2fuNyDT2XoRcY7Ct2zhAoGABrSn\nqF5dxS6ir/qdrV/iweEbvjTQBbry2dFRCmTJbm+2/ivsZ3RcXomcTn1nKCKLW3MP\nAsvzd97ZJvQBSJyNcVCCSXWXKvIUOeA2mqtgMZ8TUywhJx6bhe8eO0Cuz1PbV4gG\nJPpu0g/r0SEwP8MRhj4Rv1bLd3LaW/5yvdXJA3kCgYBd7AjcKa0pMrh4FyPVdRq5\n93P+u/2PedoNUr1ZDLb5TrpcwLGL/ChktSM5tpWGt/c6/G7Z8a6mX2R2eGfzNbh3\n+iszsU4ndjQm2dyNkgGA2yRxhdSZlShy98qLBsQLP66RMGJ2tKmRkSOIBkocBDzd\n16jPyv6tu0+TK1GXf8Qs2A==\n-----END PRIVATE KEY-----\n",
+  "client_email": "truemission-seiho@truemission-db.iam.gserviceaccount.com",
+  "client_id": "112997221828402583169",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/truemission-seiho%40truemission-db.iam.gserviceaccount.com"
+}
